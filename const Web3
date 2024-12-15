@@ -1,0 +1,44 @@
+const Web3 = require('web3');
+
+// Set up a provider (e.g., Infura, Alchemy, or local node)
+const web3 = new Web3('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID');
+
+// Contract ABI and address
+const contractABI = [
+    // Example ABI (replace with your contract's ABI)
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    }
+];
+const contractAddress = '0xYourContractAddress';
+
+// Create contract instance
+const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+// Listen for 'Transfer' event (or any other event you're interested in)
+contract.events.Transfer({
+    filter: {}, // You can use a filter to listen to specific event parameters
+    fromBlock: 'latest', // Listen from the latest block onward
+}, (error, event) => {
+    if (error) {
+        console.error("Error:", error);
+    } else {
+        console.log("Event received:", event);
+    }
+});
